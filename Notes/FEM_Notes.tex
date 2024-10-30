@@ -2116,7 +2116,7 @@ $$
 
 \begin{frame}
 \begin{defn}
-Si $c(x) \ge 0$ en una función de forma que $\sqrt{c(x)} \in L^2([0,L]),$ definamos sobre $H^1([0,L])$ la norma
+Si $c(x) \ge 0$ en una función de forma que $\sqrt{c(x)} \in L^2([0,L]),$ definamos sobre $H^1([0,L])$ o sobre $H^1_0([0,L])$ la norma
 $$
 \|u\|_{H^1_c([0,L])}^2 := \|u^{\prime}\|_{L^2[0,L]}^2 + \|\sqrt{c}\,u\|_{L^2([0,L])}^2
 $$ 
@@ -2149,17 +2149,14 @@ f:H^1([0,L]) \longrightarrow \mathbb{R}
 $$
 definida por $f(u)=\langle u, v\rangle_{ H^1([0,L]}.$ Entonces
 $$
-f(u+h)-f(u) = \langle u+h, v\rangle_{ H^1([0,L]} - \langle u, v\rangle_{ H^1([0,L]} = \langle h, v\rangle_{ H^1([0,L]}.
+f(u+\delta u)-f(u) = \langle u+\delta u, v\rangle_{ H^1([0,L]} - \langle u, v\rangle_{ H^1([0,L]} = \langle \delta u, v\rangle_{ H^1([0,L]}.
 $$
-Recordemos que para funciones en $H=\mathbb{R}^n$ se cumple:
+Esto lo podemos escribir como
 $$
-f(u+h)-f(u) = f^{\prime}(u)h + o(|h|),
+\delta f(u) \, \delta u = f(u+\delta u)-f(u) = \langle \delta u, v\rangle_{ H^1([0,L]},
 $$
-si la comparamos con la anterior expresión llegaremos a la conclusión que
-$$
-f^{\prime}(u)h = \langle h, v\rangle_{ H^1([0,L]},
-$$
-es decir, $f^{\prime}(u) (\cdot) =\langle \cdot, v \rangle_{H^1([0,L]}.$
+es decir, la derivada $f^{\prime}(u) (\cdot) =\langle \cdot, v \rangle_{H^1([0,L]}$ es una función lineal de $H^1([0,L])$
+en $\mathbb{R}.$
 \end{frame}
 
 \begin{frame}{Ejemplo 2}
@@ -2169,68 +2166,73 @@ es decir, $f^{\prime}(u) (\cdot) =\langle \cdot, v \rangle_{H^1([0,L]}.$
     $$
     definida por $g(u)=\langle u, u\rangle_{ H^1([0,L]} = \|u\|_{H^1([0,L]}^2.$ Entonces
     \begin{align*}
-    g(u+h)-g(u) & = \langle u+h, u+h\rangle_{ H^1([0,L]} - \langle u, u\rangle_{ H^1([0,L]} \\ 
-    & =  2 \langle h, u\rangle_{ H^1([0,L]} + \|u\|_{ H^1([0,L]}^2 +\|h\|_{ H^1([0,L]}^2.
+    g(u+\delta u)-g(u) & = \langle u+\delta u, u+\delta u\rangle_{ H^1([0,L]} - \langle u, u\rangle_{ H^1([0,L]} \\ 
+    & =  2 \langle \delta u, u\rangle_{ H^1([0,L]} + \|\delta u\|_{ H^1([0,L]}^2.
     \end{align*}
     Recordemos que para funciones en $H=\mathbb{R}^n$ se cumple:
     $$
-    g(u+h)-g(u) = g^{\prime}(u)h + o(|h|),
+    \delta g(u)\, \delta u = g(u+\delta u)-g(u) = g^{\prime}(u)\delta u + o(|\delta u|^2),
     $$
     si la comparamos con la anterior expresión llegaremos a la conclusión que
     $$
-    g^{\prime}(u)h = 2 \langle h, u\rangle_{ H^1([0,L]} = 2f(h), \text{ con } f(h):= \langle h, u\rangle_{ H^1([0,L]},
+    g^{\prime}(u)\delta u = 2 \langle \delta u, u\rangle_{ H^1([0,L]} = 2f(u), \text{ con } f(u):= \langle \delta u, u\rangle_{ H^1([0,L]},
     $$
-    es decir, $g^{\prime}(u) (\cdot) =2 \langle \cdot, u \rangle_{H^1([0,L]} = 2f(\cdot).$
+    es decir, $g^{\prime}(u) \delta u =2 \langle
+    \delta u, u \rangle_{H^1([0,L]} = 2f(u).$
     \end{frame}
     
     \begin{frame}{Observación}
    \begin{itemize} 
-    \item Del Ejemplo 2 deducimos que Si $g(u)=\|u\|_{ H^1([0,L]}^2$ entonces $g^{\prime}(u)h = 2 \langle h, u\rangle_{ H^1([0,L]}.$
-    \item Además $g^{\prime}(u)=2f,$ es decir,  $f(h) = \frac{1}{2} g^{\prime}(u)h:= \langle h, u\rangle_{ H^1([0,L]}.$ 
-    \item Podemos relacionar entonces la derivada de $f$ con la derivada de $g^{\prime}(u):$   $$f^{\prime} = \frac{1}{2}g^{\prime \prime}(u) = \langle \cdot , u\rangle_{ H^1([0,L]}.$$
-    \item Podemos entonces concluir que la derivada segunda de $g$ (la norma al cuadrado) es una forma bilineal.
+    \item Del Ejemplo 2 deducimos que Si $g(u)=\|u\|_{ H^1([0,L]}^2$ entonces $g^{\prime}(u)\delta u = 2 \langle \delta u, u\rangle_{ H^1([0,L]} = 2f(u).$
+    \item Entonces, podemos escribir   $$f(u) = \frac{1}{2} g^{\prime}(u) \delta u:= \langle \delta u, u\rangle_{ H^1([0,L]}.$$ 
+    \item Podemos relacionar entonces la derivada de $f$ con la derivada de $g^{\prime}(u):$   $$f^{\prime}(\delta v)\delta v = \frac{1}{2}g^{\prime \prime}(u)\delta u \, \delta v = \langle \delta u , \delta v \rangle_{ H^1([0,L]}.$$
+    \item Podemos entonces concluir que la derivada segunda de $g$ (la norma al cuadrado) es lo que se conoce como una forma bilineal.
     $$
     g^{\prime \prime}(u)(v,w) =  2\langle v, w \rangle_{H^1([0,L])}.
     $$
    \end{itemize}
         \end{frame}
 \begin{frame}{La derivada de la norma al cuadrado}
-La derivada segunda, de forma intuitiva, es una forma cuadrática. Recordemos que
+Consideremos el funcional
 $$
-\mathcal{E}^{\prime}(u):H^1([0,L]) \longrightarrow \mathbb{R},
+\mathcal{E}:H_c^1([0,L]) \longrightarrow \mathbb{R},\quad \mathcal{E}(u) = \frac{1}{2} \|u\|_{H_c^1([0,L])}^2.
 $$
-entonces
+Recordemos que la derivada del funcional es una forma lineal:
 $$
-\mathcal{E}^{\prime \prime}(u):H^1([0,L]) \times H^1([0,L]) \longrightarrow \mathbb{R}.
+\mathcal{E}^{\prime}(u):H_c^1([0,L]) \longrightarrow \mathbb{R},
+\quad \mathcal{E}^{\prime}(u)\delta u = \langle u, \delta u \rangle_{H_c^1([0,L])}.
+$$
+La derivada segunda entonces es una forma bilineal:
+$$
+\mathcal{E}^{\prime \prime}(u):H_c^1([0,L]) \times H_c^1([0,L]) \longrightarrow \mathbb{R}.
 $$
 En nuestro caso
 $$
 \mathcal{E}^{\prime \prime}(u)(v,w) =  \langle v, w \rangle_{H^1_c([0,L])},
 $$
-es una forma cuadrática,
+es una forma bilineal definida positiva:
 $$
-\mathcal{E}^{\prime \prime}(u)(v,v) =  \langle v, v \rangle_{H^1_c([0,L])} = \|v\|_{H^1_c([0,L])}^2 \ge 0,
+\mathcal{E}^{\prime \prime}(u)(v,v) =  \langle v, v \rangle_{H^1_c([0,L])} = \|v\|_{H^1_c([0,L])}^2 \ge 0.
 $$
-definida positiva.
 \end{frame}
 
 \begin{frame}
-Si consideramos la función
+Si consideramos el funcional
 $$
-J:H_0^1([0,L]) \longrightarrow \mathbb{R}
+J:H_c^1([0,L]) \longrightarrow \mathbb{R}
 $$
-definida por
+definido por
 $$
 J(u) = \frac{1}{2}  \|u\|_{H^1_c([0,L])}^2 - \left\langle f, u \right\rangle_{L^2([0,L])}
 = \mathcal{E}(u) - \left\langle f, u \right\rangle_{L^2([0,L])}.
 $$
 es derivable, su primera derivada es
 $$
-J^{\prime}(u) = \mathcal{E}^{\prime}(u) - \left\langle f, \cdot \right\rangle_{L^2([0,L])}
+J^{\prime}(u) \delta u = \mathcal{E}^{\prime}(u) \delta u - \left\langle f, \delta u \right\rangle_{L^2([0,L])}
 $$
 y su segunda derivada
 $$
-J^{\prime \prime }(u) = \mathcal{E}^{\prime \prime }(u)
+J^{\prime \prime }(u) \delta u \, \delta v= \mathcal{E}^{\prime \prime }(u) \delta u \, \delta v - \left\langle f, \delta v \right\rangle_{L^2([0,L])},
 $$
 es una forma cuadrática definida positiva, lo que implica que la función $J$ es convexa.
 \end{frame}
@@ -2246,11 +2248,11 @@ Además, si $u^*$ es la solución de \eqref{ODE1} con condiciones frontera de Di
 entonces $u^*=u^{\star},$ y donde se cumple la condición de optimalidad primer orden
 siguiente:
 \begin{equation}
-J^{\prime}(u^{\star}) v = 0, \label{optim1}
+J^{\prime}(u^{\star}) \delta v = 0, \label{optim1}
 \end{equation}
-para todo $v$ en un conjunto denso de $H_0^1([0,L]),$ es decir,
+para todo $\delta v$ en un conjunto denso de $H_0^1([0,L]),$ es decir,
 \begin{equation}
-\left\langle  (u^{\star})^{\prime} , v^{\prime} \right\rangle_{L^2([0,L])}  + \left\langle  c\,u^{\star}, v \right\rangle_{L^2([0,L])} =  \left\langle f, v \right\rangle_{L^2([0,L])},
+\left\langle  (u^{\star})^{\prime} , (\delta v)^{\prime} \right\rangle_{L^2([0,L])}  + \left\langle  c\,u^{\star}, \delta v \right\rangle_{L^2([0,L])} =  \left\langle f, \delta v \right\rangle_{L^2([0,L])},
 \end{equation}
 para todo $v$ en un conjunto denso de $H_0^1([0,L]).$
 \end{thm}
