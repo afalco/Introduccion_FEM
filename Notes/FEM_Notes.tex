@@ -35,6 +35,31 @@
 
 \tikzset{>=stealth}
 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
 
 \theoremstyle{plain} % default
   \newtheorem{thm}{Teorema}
@@ -2447,60 +2472,208 @@ es una matriz triadiagonal.
 \end{frame}
 
 \begin{frame}
-Consideremos el problema
-\begin{align*}
-- u^{\prime \prime}(x) + \,u(x) & = 1 \text{ para } x \in ]0,1[\\ 
-& u(0) = 0  \text{ and } u(1) = 0.  
-\end{align*}
-En este caso $f=1$ y tenemos que calcular
-\begin{align*}
-\left\langle 1, w_{k} \right\rangle_{L^2([0,L])} = \int_0^1 w_k(x) dx = h
-\end{align*}
+    \begin{itemize}
+    \item Vamos a resolver numericamente el problema a valor frontera
+    $$
+    -u''(x)=f(x) \quad u(0)=u(1)=0
+    $$
+    para u término fuente constante, esto es, $f(x)=-u''(x)=(2\pi)^2\sin(2\pi x).$ La solución es en este caso $u(x)=\sin(2\pi x).$ 
+    \item Construiremos la solución aproximada para obtener una solución aproximada $u_h$ del problema empleando el método de los elementos finitos con una malla uniforme .
+    \item Para ello consideramos una partición del intervalo $[0,1]$ en $d+1$ subintervalos de longitud $h=1/(d+1),$ esto es, $x_i=ih$ para $i=0,1,\ldots,d+1.$
+\item Consideraremos las funciones test $w_i$ definidas para $i=0,\ldots,d$ de forma que 
+$$
+\dim \mathrm{span}\{w_0,w_1,\ldots,w_d\} = d+1.
+$$
+\end{itemize}
 \end{frame}
 
-\begin{frame}{Código Matlab}
-\lstinputlisting{ejemplo.m}
+
+\begin{frame}
+    \begin{itemize}
+        \item En primer lugar calcularemos la integral
+        \begin{align*}
+        \int_{x_0}^{x_1} f(x)w_0(x)dx & =\int_{x_0}^{x_1}(2\pi)^2 \sin(2\pi x) \frac{x_1-x}{x_1-x_0}dx \\ 
+        &  = \frac{(2\pi)^2}{x_1-x_0}\int_{x_0}^{x_1} \sin(2\pi x) (x_1-x)dx
+        \end{align*}
+        \item En general hay que tener en cuenta las integrales del tipo
+        $$
+        \int_{x_{i-1}}^{x_{i+1}}f(x)w_i(x)dx
+        $$
+        que se descomponen en dos integrales
+        $$
+        \int_{x_{i-1}}^{x_i} f(x)w_i(x)dx=\int_{x_{i-1}}^{x_{i}}(2\pi)^2 \sin(2\pi x) \frac{x-x_{i-1}}{x_i-x_{i-1}}dx
+        $$
+        y
+        $$
+        \int_{x_{i}}^{x_{i+1}} f(x)w_i(x)dx=\int_{x_{i}}^{x_{i+1}}(2\pi)^2 \sin(2\pi x) \frac{x_{i+1}-x}{x_{i+1}-x_{i}}dx
+        $$
+    \end{itemize}
 \end{frame}
 
 \begin{frame}
+    \begin{itemize}
+        \item Finalmente hay que tener en cuenta la integral
+        $$
+        \int_{x_{d-1}}^{x_{d}} f(x) w_d(x)dx =\int_{x_{d-1}}^{x_{d}} (2\pi)^2 \sin(2\pi x) \frac{x-x_{d-1}}{x_{d}-x_{d-1}}dx
+        $$        
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    En primer lugar, vamos a importar las librerías necesarias para realizar los cálculos.
+\begin{lstlisting}[language=Python]
+import numpy as np
+import matplotlib.pyplot as  plt
+import matplotlib.colors as colors
+import matplotlib.pyplot as plt
+from scipy.integrate import quad
+\end{lstlisting}
+En segundo lugar, vamos a definir la malla.
+\begin{lstlisting}[language=Python]
+d=3000
+x=np.linspace(0,1,d+2)
+x[0]=0
+x[d+1]=1
+\end{lstlisting}
+\end{frame}
+
+
+\begin{frame}[fragile]
+Representamos la gráfica de la función $u(x)=\sin 2\pi x$ solución del problema:
+\begin{lstlisting}[language=Python]
+u=np.sin(2*np.pi*x)
+plt.plot(x,u)
+plt.show()
+\end{lstlisting}
 \begin{center}
-\includegraphics[scale=0.2]{grafica.png}
+\includegraphics[scale=0.5]{Figura01.png}
 \end{center}
 \end{frame}
 
-\begin{frame}
-Consideremos el problema
-\begin{align*}
-- u^{\prime \prime}(x) + \,u(x) & = 3-2x \text{ para } x \in ]0,1[\\ 
-& u(0) = 0  \text{ and } u(1) = 0.  
-\end{align*}
-Podemos comprobar que la $u(x)=x-x^2$ es una solución de la ecuación. En este 
-caso $f(x)=2-3x$ y tenemos que calcular
-\begin{align*}
-\left\langle 3-2x, w_{i} \right\rangle_{L^2([0,L])} & = \int_0^1 (3-2x) w_k(x) dx \\ 
-& =  \int_{x_{i-1}}^{x_i} (3-2x) \frac{x-x_{i-1}}{x_i-x_{i-1}} dx \\ & +
-\int_{x_{i}}^{x_{i+1}} (3-2x) \frac{x_{i+1}-x}{x_{i+1}-x_i} dx \\ 
-& = \frac{1}{h }\left(\int_{x_{i-1}}^{x_i} (3-2x) (x-x_{i-1}) dx \right. \\ + 
-& \left. \int_{x_{i}}^{x_{i+1}} (3-2x) (x_{i+1}-x) dx\right)
-\end{align*}
+
+\begin{frame}[fragile]
+Vamos a calcular la solución aproximada $u_h$ que definimos como un vector de dimensión $d+2$ de la forma $u_h=(u_0,u_1,\ldots,u_{d+1})$ que inicializamos a cero. Introducimos el paso  espacial $h_i = x_{i+1}-x_i,$ que en principio será constante e igual a $h=1/(d+1).$   
+\begin{lstlisting}[language=Python]
+uh=np.zeros(d+2)
+h=np.zeros(d+1)
+for i in range(d+1):
+    h[i]=x[i+1]-x[i]
+\end{lstlisting}
 \end{frame}
 
-\begin{frame}{Código Matlab}
-\lstinputlisting{ejemplo1.m}
+\begin{frame}[fragile]
+Vamos a reducir el problema a la solución del sistema lineal
+$$
+M \,u_h = F
+$$
+para ello definimos la matriz $M$ y el vector $F$ de la forma siguiente:
+\begin{lstlisting}[language=Python]
+M=np.zeros((d+2,d+2))           
+F=np.zeros(d+2)
+M[0,0]=1
+M[d+1,d+1]=1
+M[1,1]=1/h[0]
+F[1]=(2*np.pi)*(2*np.pi)*quad(lambda t: (np.sin(2*np.pi*t)*(x[1]-t))/h[0],x[0],x[1])[0]
+\end{lstlisting}
+En este caso $F[1]$ contiene la aproximación numérica de la integral
+\begin{align*}
+    \int_{x_0}^{x_1} f(x)w_0(x)dx & =\int_{x_0}^{x_1}(2\pi)^2 \sin(2\pi x) \frac{x_1-x}{x_1-x_0}dx \\ 
+    &  = \frac{(2\pi)^2}{x_1-x_0}\int_{x_0}^{x_1} \sin(2\pi x) (x_1-x)dx
+    \end{align*}
 \end{frame}
 
-\begin{frame}
+
+\begin{frame}[fragile]
+Las integrales de la forma
+$$
+        \int_{x_{i-1}}^{x_{i+1}}f(x)w_i(x)dx
+$$
+empleadas para definir el vector $F$ y el resto de componentes de la matriz $M$ se escriben de la forma siguiente:
+\begin{lstlisting}[language=Python]
+for i in range(1,d):
+    M[i,i] = M[i,i] + 1/h[i]
+    M[i,i+1] = M[i,i+1] - 1/h[i]
+    M[i+1,i] = M[i+1,i] - 1/h[i]
+    M[i+1,i+1] = M[i+1,i+1] + 1/h[i]
+    F[i] = F[i] - (2*np.pi)*(2*np.pi)*(quad(lambda t:(np.sin(2*np.pi*t)*(t-x[i+1])),x[i],x[i+1])[0])/h[i]
+    F[i+1] = F[i+1] + (2*np.pi)*(2*np.pi)*(quad(lambda t:(np.sin(2*np.pi*t)*(t-x[i])),x[i],x[i+1])[0])/h[i]
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+Finalmente hay que tener en cuenta la integral
+Finalmente hay que tener en cuenta la integral
+$$
+\int_{x_{d-1}}^{x_{d}} f(x) w_d(x)dx =\int_{x_{d-1}}^{x_{d}} (2\pi)^2 \sin(2\pi x) \frac{x-x_{d-1}}{x_{d}-x_{d-1}}dx
+$$
+\begin{lstlisting}[language=Python]
+M[d,d]=M[d,d]+1/h[d]
+F[d]=F[d] + (2*np.pi)*(2*np.pi)*(quad(lambda t:(np.sin(2*np.pi*t)*(t-x[d-1])),x[d-1],x[d])[0])/h[d]
+\end{lstlisting}
+Pasamos entonces a resolver el sistema lineal $M\, u_h = F:$
+\begin{lstlisting}[language=Python]
+uh=np.linalg.solve(M,F)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+Representamos graficamente la solución aproximada $u_h$ y la solución exacta $u$ en la misma gráfica.
+\begin{lstlisting}[language=Python]
+plt.plot(x,u)
+plt.plot(x,uh)
+plt.show()
+\end{lstlisting}
 \begin{center}
-\includegraphics[scale=0.2]{grafica1.png}
+    \includegraphics[scale=0.5]{Figura02.png}
 \end{center}
 \end{frame}
 
-\begin{frame}{Estudio del error de aproximación}
+\begin{frame}[fragile]
+Estudiamos el error de aproximación.   
+\begin{lstlisting}[language=Python]
+Error_cuadratico_uh = np.linalg.norm(uh-u)
+print(Error_cuadratico_uh/d)
+plt.plot(x,uh-u)
+plt.show()
+\end{lstlisting}
 \begin{center}
-\includegraphics[scale=0.15]{grafica2.png}
+\includegraphics[scale=0.3]{Figura03.png}
 \end{center}
 Error calculado como $\texttt{error}(i)=(u(x_i)-\widehat{u}_i)^2$. El error
-cuadrático medio: $MCE = \frac{1}{d} \sum_{i=1}^d\texttt{error}(i) = 3.8 \times 10^{-4}.$
+cuadrático medio: $MCE = \frac{1}{d} \sum_{i=1}^d\texttt{error}(i) = 4.270170468282468e-11.$
 \end{frame}
 
 \end{document}
+
+
+\begin{frame}
+    Consideremos el problema
+    \begin{align*}
+    - u^{\prime \prime}(x) + \,u(x) & = 3-2x \text{ para } x \in ]0,1[\\ 
+    & u(0) = 0  \text{ and } u(1) = 0.  
+    \end{align*}
+    Podemos comprobar que la $u(x)=x-x^2$ es una solución de la ecuación. En este 
+    caso $f(x)=2-3x$ y tenemos que calcular
+    \begin{align*}
+    \left\langle 3-2x, w_{i} \right\rangle_{L^2([0,L])} & = \int_0^1 (3-2x) w_k(x) dx \\ 
+    & =  \int_{x_{i-1}}^{x_i} (3-2x) \frac{x-x_{i-1}}{x_i-x_{i-1}} dx \\ & +
+    \int_{x_{i}}^{x_{i+1}} (3-2x) \frac{x_{i+1}-x}{x_{i+1}-x_i} dx \\ 
+    & = \frac{1}{h }\left(\int_{x_{i-1}}^{x_i} (3-2x) (x-x_{i-1}) dx \right. \\ + 
+    & \left. \int_{x_{i}}^{x_{i+1}} (3-2x) (x_{i+1}-x) dx\right)
+    \end{align*}
+    \end{frame}
+    
+    \begin{frame}
+    \begin{center}
+    \includegraphics[scale=0.2]{grafica1.png}
+    \end{center}
+    \end{frame}
+    
+    \begin{frame}{Estudio del error de aproximación}
+    \begin{center}
+    \includegraphics[scale=0.15]{grafica2.png}
+    \end{center}
+    Error calculado como $\texttt{error}(i)=(u(x_i)-\widehat{u}_i)^2$. El error
+    cuadrático medio: $MCE = \frac{1}{d} \sum_{i=1}^d\texttt{error}(i) = 3.8 \times 10^{-4}.$
+    \end{frame}
+    
